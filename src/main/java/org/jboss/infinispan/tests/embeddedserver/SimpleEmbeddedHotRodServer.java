@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.MDC;
 import org.infinispan.manager.DefaultCacheManager;
 import org.infinispan.server.hotrod.HotRodServer;
 import org.infinispan.server.hotrod.configuration.HotRodServerConfiguration;
@@ -22,6 +23,10 @@ public class SimpleEmbeddedHotRodServer {
     private HotRodServerConfiguration build;
     private DefaultCacheManager defaultCacheManager;
     private HotRodServer server;
+
+    // static{
+    // MDC.put("COMPONENT", "[SERVER]");
+    // }
 
     public static synchronized SimpleEmbeddedHotRodServer getInstance() {
         if (instance == null)

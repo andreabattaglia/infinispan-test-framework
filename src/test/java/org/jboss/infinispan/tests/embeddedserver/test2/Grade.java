@@ -3,7 +3,6 @@
  */
 package org.jboss.infinispan.tests.embeddedserver.test2;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 

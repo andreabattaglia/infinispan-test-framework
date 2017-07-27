@@ -4,46 +4,25 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
-import java.util.UUID;
 
 import org.apache.log4j.Logger;
 import org.infinispan.client.hotrod.RemoteCache;
-import org.infinispan.client.hotrod.RemoteCacheManager;
 import org.infinispan.client.hotrod.Search;
-import org.infinispan.client.hotrod.configuration.Configuration;
-import org.infinispan.client.hotrod.configuration.ConfigurationBuilder;
-import org.infinispan.client.hotrod.configuration.NearCacheMode;
-import org.infinispan.client.hotrod.marshall.ProtoStreamMarshaller;
-import org.infinispan.protostream.SerializationContext;
-import org.infinispan.protostream.annotations.ProtoSchemaBuilder;
-import org.infinispan.protostream.annotations.ProtoSchemaBuilderException;
+import org.infinispan.query.dsl.Expression;
 import org.infinispan.query.dsl.Query;
 import org.infinispan.query.dsl.QueryBuilder;
-import org.infinispan.query.dsl.QueryFactory;
 import org.infinispan.query.dsl.SortOrder;
-import org.infinispan.query.remote.client.ProtobufMetadataManagerConstants;
 import org.jboss.infinispan.tests.embeddedserver.AbstractSimpleEmbeddedHotRodServerTest;
-import org.jboss.infinispan.tests.embeddedserver.SimpleEmbeddedHotRodServer;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class SimpleEmbeddedHotRodServerTest
-        extends AbstractSimpleEmbeddedHotRodServerTest {
+public class BasicQueryTest extends AbstractSimpleEmbeddedHotRodServerTest {
     /**
      * Logger for this class
      */
-    private static final Logger LOGGER = Logger
-            .getLogger(SimpleEmbeddedHotRodServerTest.class);
+    private static final Logger LOGGER = Logger.getLogger(BasicQueryTest.class);
 
     private RemoteCache<Integer, MyEntity> testCache;
 
@@ -107,8 +86,9 @@ public class SimpleEmbeddedHotRodServerTest
 
         Query query = null;
         QueryBuilder<Query> qb = queryFactory.from(MyEntity.class)//
-                .setProjection("id")//
-                .orderBy("id", SortOrder.ASC).having("guid").eq(uniqueValue)//
+                .select("id")//
+                .orderBy("id", SortOrder.ASC)//
+                .having("guid").eq(uniqueValue)//
                 .toBuilder();
 
         query = qb.build();

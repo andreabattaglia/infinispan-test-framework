@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Random;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.MDC;
 import org.infinispan.client.hotrod.RemoteCache;
 import org.infinispan.client.hotrod.RemoteCacheManager;
 import org.infinispan.client.hotrod.configuration.Configuration;
@@ -34,6 +35,10 @@ public class AbstractSimpleEmbeddedHotRodServerTest {
     private RemoteCacheManager remoteCacheManager;
     private ConfigurationBuilder configurationBuilder;
     protected QueryFactory<Query> queryFactory;
+
+    // static{
+    // MDC.put("COMPONENT", "[SERVER]");
+    // }
 
     @BeforeClass
     public static void beforeClass() throws Exception {

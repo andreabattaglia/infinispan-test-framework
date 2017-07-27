@@ -12,6 +12,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.infinispan.client.hotrod.RemoteCache;
 import org.infinispan.client.hotrod.Search;
+import org.infinispan.query.dsl.Expression;
 import org.infinispan.query.dsl.Query;
 import org.infinispan.query.dsl.QueryBuilder;
 import org.jboss.infinispan.tests.embeddedserver.AbstractSimpleEmbeddedHotRodServerTest;
@@ -43,7 +44,7 @@ public class NestedIndexesQueryTest
         testCache.clear();
         queryFactory = Search.getQueryFactory(testCache);
     }
-    
+
     @Override
     public void tearDown() throws Exception {
         testCache.clear();
@@ -67,16 +68,17 @@ public class NestedIndexesQueryTest
         Query query = null;
         QueryBuilder<Query> qb = queryFactory.from(Grade.class)
                 // OK
-                // .setProjection("ref").having("name").eq("Grade1")
+                // .select(Expression.property("ref")).having("name").eq("Grade1")
                 // OK
                 // .having("name").eq("Grade1")
                 // OK
                 // .having("forwardsGrades.dealType.name").eq("DealType3")
                 // OK
-                // .setProjection("ref").having("forwardsGrades.dealType.name").eq("DealType3")
-
-                .setProjection("forwardsGrades")
+                .select(Expression.property("ref"))
                 .having("forwardsGrades.dealType.name").eq("DealType3")
+                // KO
+                // .select("forwardsGrades")//
+                // .having("forwardsGrades.dealType.name").eq("DealType3")//
                 .toBuilder();
         query = qb.build();
         List<Object[]> results = query.list();
